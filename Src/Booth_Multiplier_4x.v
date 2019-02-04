@@ -70,11 +70,11 @@
 //
 //  The basic operations follow those of the standard Booth multiplier except
 //  that the transitions are being tracked across 4 bits plus the guard bit.
-//  The result is that the operations required are 0, ±1, ±2, ±3, ±4, ±5, ±6,
-//  ±7, and ±8 times the multiplicand (M). However, it is possible to reduce 
+//  The result is that the operations required are 0, Â±1, Â±2, Â±3, Â±4, Â±5, Â±6,
+//  Â±7, and Â±8 times the multiplicand (M). However, it is possible to reduce 
 //  the number of partial products required to implement the multiplication to
-//  two. That is, ±3, ±5, ±6, and ±7 can be written in terms of combinations of
-//  ±1, ±2, ±4, and ±8. For example, 3M = (2M + 1M), 5M = (4M + M), 6M = (4M
+//  two. That is, Â±3, Â±5, Â±6, and Â±7 can be written in terms of combinations of
+//  Â±1, Â±2, Â±4, and Â±8. For example, 3M = (2M + 1M), 5M = (4M + M), 6M = (4M
 //  + 2M), and 7M = (8M - M). Thus, the following 32 entry table defines the
 //  operations required for generating the partial products through each pass
 //  of the algorithm over the multiplier:

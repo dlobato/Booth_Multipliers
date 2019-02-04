@@ -126,9 +126,9 @@ end
 always @(*)
 begin
     case(Prod[1:0])
-        2'b01   : S <= Prod[(2**(pN+1) + 1):(2**pN + 1)] + A;
-        2'b10   : S <= Prod[(2**(pN+1) + 1):(2**pN + 1)] - A;
-        default : S <= Prod[(2**(pN+1) + 1):(2**pN + 1)];
+        2'b01   : S = Prod[(2**(pN+1) + 1):(2**pN + 1)] + A;
+        2'b10   : S = Prod[(2**(pN+1) + 1):(2**pN + 1)] - A;
+        default : S = Prod[(2**(pN+1) + 1):(2**pN + 1)];
     endcase
 end
 

@@ -140,20 +140,20 @@ end
 
 //  Compute Upper Partial Product: (N + 1) bits in width
 
-always @(*) Booth <= {Prod[0], Guard};  // Booth's Multiplier Recoding field
+always @(*) Booth = {Prod[0], Guard};  // Booth's Multiplier Recoding field
 
 assign Hi = Prod[2*N:N];                // Upper Half of the Product Register
 
 always @(*)
 begin
     case(Booth)
-        2'b01   : {Ci, B} <= {1'b0,  A};
-        2'b10   : {Ci, B} <= {1'b1, ~A};
-        default : {Ci, B} <= 0;
+        2'b01   : {Ci, B} = {1'b0,  A};
+        2'b10   : {Ci, B} = {1'b1, ~A};
+        default : {Ci, B} = 0;
     endcase
 end
 
-always @(*) S <= Hi + B + Ci;
+always @(*) S = Hi + B + Ci;
 
 //  Register Partial products and shift right arithmetically.
 //      Product register has a sign extension guard bit.

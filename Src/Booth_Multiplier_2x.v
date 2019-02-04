@@ -74,7 +74,7 @@
 //                          of extra bits required is equal to 1 plus the shift
 //                          required in the partial products. In this implemen-
 //                          tation, the number of extra bits is 2: one for the
-//                          sign and one for the shift (±2).
+//                          sign and one for the shift (Â±2).
 //
 //  1.10    10J09   MAM     Made correction to the parameterized equation for
 //                          the Guard bit. The paramterization of Prod[pN-1]
@@ -101,7 +101,7 @@
 //
 //  The basic operations follow those of the standard Booth multiplier except
 //  that the transitions are being tracked across 2 bits plus the guard bit.
-//  The result is that the operations required are 0, ±1, and ±2 times the 
+//  The result is that the operations required are 0, Â±1, and Â±2 times the 
 //  multiplicand (M). That is:
 //  
 //  Prod[2:0]   Operation
@@ -119,18 +119,18 @@
 //  simply indicate to skip over runs of 1s and 0s. The terms 001 and 110 are
 //  indicative of the 01 (+1) and 10 (-1) operations of the standard Booth al-
 //  gorithm. The terms 010 (+2,-1) and 101 (-2,+1) reduce to the operations
-//  noted in the table, namely ±1*M, respectively. The terms 011 (+2,0) and
+//  noted in the table, namely Â±1*M, respectively. The terms 011 (+2,0) and
 //  100 (-2, 0) are the two new operations required for this modified Booth
 //  algorithm.
 //
 //  The algorithm could be extended to any number of bits as required by noting
 //  that as more bits are added to the left, the number of terms (operations)
 //  required increases. Addding another bit, i.e. a 3-bit Booth recoding, means
-//  that the operations required of the adder/partial product are 0, ±1, ±2,
-//  and ±4. The guard bits provided for the sign bit accomodates the ±2 opera-
+//  that the operations required of the adder/partial product are 0, Â±1, Â±2,
+//  and Â±4. The guard bits provided for the sign bit accomodates the Â±2 opera-
 //  tion required for the 2-bit modified booth algorithm. Adding a third bit
 //  means that a third guard bit will be required for the sign bit to insure
-//  that there is no overflow in the partial product when ±4 is the operation.
+//  that there is no overflow in the partial product when Â±4 is the operation.
 //
 //  A better implementation might be to consider implementing two simultaneous
 //  2-bit partial products at a time, and combining the partial products after

@@ -85,11 +85,11 @@
 //
 //  The basic operations follow those of the standard Booth multiplier except
 //  that the transitions are being tracked across 4 bits plus the guard bit.
-//  The result is that the operations required are 0, ±1, ±2, ±3, ±4, ±5, ±6,
-//  ±7, and ±8 times the multiplicand (M). However, it is possible to reduce 
+//  The result is that the operations required are 0, Â±1, Â±2, Â±3, Â±4, Â±5, Â±6,
+//  Â±7, and Â±8 times the multiplicand (M). However, it is possible to reduce 
 //  the number of partial products required to implement the multiplication to
-//  two. That is, ±3, ±5, ±6, and ±7 can be written in terms of combinations of
-//  ±1, ±2, ±4, and ±8. For example, 3M = (2M + 1M), 5M = (4M + M), 6M = (4M
+//  two. That is, Â±3, Â±5, Â±6, and Â±7 can be written in terms of combinations of
+//  Â±1, Â±2, Â±4, and Â±8. For example, 3M = (2M + 1M), 5M = (4M + M), 6M = (4M
 //  + 2M), and 7M = (8M - M). Thus, the following 32 entry table defines the
 //  operations required for generating the partial products through each pass
 //  of the algorithm over the multiplier:
@@ -138,9 +138,9 @@
 //  of the two adders which are required.
 //
 //  Examining the previous recoding table shows that seven multiples of the
-//  multiplicand (M) are represented in the first multiplicand column, 0x, ±2x,
-//  ±4x, and ±8x, and five are represented in the second multiplicand column,
-//  0x, ±1x, and ±2. The synthesizer is able to identify the need for adders and
+//  multiplicand (M) are represented in the first multiplicand column, 0x, Â±2x,
+//  Â±4x, and Â±8x, and five are represented in the second multiplicand column,
+//  0x, Â±1x, and Â±2. The synthesizer is able to identify the need for adders and
 //  subractors, but is unable to morph the structure from one embedded in a 32:1
 //  multiplexer into one where an 8:1 multiplexer feeds the first multiplicand
 //  products into one adder, and another 8:1 multiplexer feeds the second multi-
@@ -165,9 +165,9 @@
 //  its current definition to an equivalent definition that can be implemented
 //  using just two multiplicand products. The following recoding table can be
 //  compared to the one above to see the adjustments made. In essence, the first
-//  multiplicand column allows only five multiplicand product values, 0M, ±4M,
-//  and ±8M, and the second multiplicand column also allows only five values,
-//  0M, ±1M, and ±2M.
+//  multiplicand column allows only five multiplicand product values, 0M, Â±4M,
+//  and Â±8M, and the second multiplicand column also allows only five values,
+//  0M, Â±1M, and Â±2M.
 //  
 //  Prod[4:0]       Operation
 //    00000      Prod <= (Prod + 0*M + 0*M) >> 4;
@@ -373,7 +373,7 @@ assign Mx1 = A;
 
 //  Compute Upper Partial Product: (N + 4) bits in width
 
-always @(*) Booth <= {Prod[3:0], Guard};    // Booth's Multiplier Recoding field
+always @(*) Booth = {Prod[3:0], Guard};    // Booth's Multiplier Recoding field
 
 assign Hi = Prod[((2*N) + 3):N];            // Upper Half of Product Register
 
@@ -384,39 +384,39 @@ assign Hi = Prod[((2*N) + 3):N];            // Upper Half of Product Register
 always @(*)
 begin
     case(Booth)
-        5'b00000 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod + 0*M + 0*M) >> 4;
-        5'b00001 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod + 0*M + 1*M) >> 4;
-        5'b00010 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod + 0*M + 1*M) >> 4;
-        5'b00011 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod + 0*M + 2*M) >> 4;
-        5'b00100 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod + 0*M + 2*M) >> 4;
-        5'b00101 : {PnM_B, M_Sel_B, En_B} <= 3'b001; // (Prod + 4*M - 1*M) >> 4;
-        5'b00110 : {PnM_B, M_Sel_B, En_B} <= 3'b001; // (Prod + 4*M - 1*M) >> 4;
-        5'b00111 : {PnM_B, M_Sel_B, En_B} <= 3'b001; // (Prod + 4*M + 0*M) >> 4;
-        5'b01000 : {PnM_B, M_Sel_B, En_B} <= 3'b001; // (Prod + 4*M + 0*M) >> 4;
-        5'b01001 : {PnM_B, M_Sel_B, En_B} <= 3'b001; // (Prod + 4*M + 1*M) >> 4;
-        5'b01010 : {PnM_B, M_Sel_B, En_B} <= 3'b001; // (Prod + 4*M + 1*M) >> 4;
-        5'b01011 : {PnM_B, M_Sel_B, En_B} <= 3'b001; // (Prod + 4*M + 2*M) >> 4;
-        5'b01100 : {PnM_B, M_Sel_B, En_B} <= 3'b001; // (Prod + 4*M + 2*M) >> 4;
-        5'b01101 : {PnM_B, M_Sel_B, En_B} <= 3'b011; // (Prod + 8*M - 1*M) >> 4;
-        5'b01110 : {PnM_B, M_Sel_B, En_B} <= 3'b011; // (Prod + 8*M - 1*M) >> 4;
-        5'b01111 : {PnM_B, M_Sel_B, En_B} <= 3'b011; // (Prod + 8*M + 0*M) >> 4;
-        5'b10000 : {PnM_B, M_Sel_B, En_B} <= 3'b111; // (Prod - 8*M - 0*M) >> 4;
-        5'b10001 : {PnM_B, M_Sel_B, En_B} <= 3'b111; // (Prod - 8*M + 1*M) >> 4;
-        5'b10010 : {PnM_B, M_Sel_B, En_B} <= 3'b111; // (Prod - 8*M + 1*M) >> 4;
-        5'b10011 : {PnM_B, M_Sel_B, En_B} <= 3'b101; // (Prod - 4*M - 2*M) >> 4;
-        5'b10100 : {PnM_B, M_Sel_B, En_B} <= 3'b101; // (Prod - 4*M - 2*M) >> 4;
-        5'b10101 : {PnM_B, M_Sel_B, En_B} <= 3'b101; // (Prod - 4*M - 1*M) >> 4;
-        5'b10110 : {PnM_B, M_Sel_B, En_B} <= 3'b101; // (Prod - 4*M - 1*M) >> 4;
-        5'b10111 : {PnM_B, M_Sel_B, En_B} <= 3'b101; // (Prod - 4*M - 0*M) >> 4;
-        5'b11000 : {PnM_B, M_Sel_B, En_B} <= 3'b101; // (Prod - 4*M - 0*M) >> 4;
-        5'b11001 : {PnM_B, M_Sel_B, En_B} <= 3'b101; // (Prod - 4*M + 1*M) >> 4;
-        5'b11010 : {PnM_B, M_Sel_B, En_B} <= 3'b101; // (Prod - 4*M + 1*M) >> 4;
-        5'b11011 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod - 0*M - 2*M) >> 4;
-        5'b11100 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod - 0*M - 2*M) >> 4;
-        5'b11101 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod - 0*M - 1*M) >> 4;
-        5'b11110 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod - 0*M - 1*M) >> 4;
-        5'b11111 : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod - 0*M - 0*M) >> 4;
-        default  : {PnM_B, M_Sel_B, En_B} <= 3'b000; // (Prod - 0*M - 0*M) >> 4;
+        5'b00000 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod + 0*M + 0*M) >> 4;
+        5'b00001 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod + 0*M + 1*M) >> 4;
+        5'b00010 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod + 0*M + 1*M) >> 4;
+        5'b00011 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod + 0*M + 2*M) >> 4;
+        5'b00100 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod + 0*M + 2*M) >> 4;
+        5'b00101 : {PnM_B, M_Sel_B, En_B} = 3'b001; // (Prod + 4*M - 1*M) >> 4;
+        5'b00110 : {PnM_B, M_Sel_B, En_B} = 3'b001; // (Prod + 4*M - 1*M) >> 4;
+        5'b00111 : {PnM_B, M_Sel_B, En_B} = 3'b001; // (Prod + 4*M + 0*M) >> 4;
+        5'b01000 : {PnM_B, M_Sel_B, En_B} = 3'b001; // (Prod + 4*M + 0*M) >> 4;
+        5'b01001 : {PnM_B, M_Sel_B, En_B} = 3'b001; // (Prod + 4*M + 1*M) >> 4;
+        5'b01010 : {PnM_B, M_Sel_B, En_B} = 3'b001; // (Prod + 4*M + 1*M) >> 4;
+        5'b01011 : {PnM_B, M_Sel_B, En_B} = 3'b001; // (Prod + 4*M + 2*M) >> 4;
+        5'b01100 : {PnM_B, M_Sel_B, En_B} = 3'b001; // (Prod + 4*M + 2*M) >> 4;
+        5'b01101 : {PnM_B, M_Sel_B, En_B} = 3'b011; // (Prod + 8*M - 1*M) >> 4;
+        5'b01110 : {PnM_B, M_Sel_B, En_B} = 3'b011; // (Prod + 8*M - 1*M) >> 4;
+        5'b01111 : {PnM_B, M_Sel_B, En_B} = 3'b011; // (Prod + 8*M + 0*M) >> 4;
+        5'b10000 : {PnM_B, M_Sel_B, En_B} = 3'b111; // (Prod - 8*M - 0*M) >> 4;
+        5'b10001 : {PnM_B, M_Sel_B, En_B} = 3'b111; // (Prod - 8*M + 1*M) >> 4;
+        5'b10010 : {PnM_B, M_Sel_B, En_B} = 3'b111; // (Prod - 8*M + 1*M) >> 4;
+        5'b10011 : {PnM_B, M_Sel_B, En_B} = 3'b101; // (Prod - 4*M - 2*M) >> 4;
+        5'b10100 : {PnM_B, M_Sel_B, En_B} = 3'b101; // (Prod - 4*M - 2*M) >> 4;
+        5'b10101 : {PnM_B, M_Sel_B, En_B} = 3'b101; // (Prod - 4*M - 1*M) >> 4;
+        5'b10110 : {PnM_B, M_Sel_B, En_B} = 3'b101; // (Prod - 4*M - 1*M) >> 4;
+        5'b10111 : {PnM_B, M_Sel_B, En_B} = 3'b101; // (Prod - 4*M - 0*M) >> 4;
+        5'b11000 : {PnM_B, M_Sel_B, En_B} = 3'b101; // (Prod - 4*M - 0*M) >> 4;
+        5'b11001 : {PnM_B, M_Sel_B, En_B} = 3'b101; // (Prod - 4*M + 1*M) >> 4;
+        5'b11010 : {PnM_B, M_Sel_B, En_B} = 3'b101; // (Prod - 4*M + 1*M) >> 4;
+        5'b11011 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod - 0*M - 2*M) >> 4;
+        5'b11100 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod - 0*M - 2*M) >> 4;
+        5'b11101 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod - 0*M - 1*M) >> 4;
+        5'b11110 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod - 0*M - 1*M) >> 4;
+        5'b11111 : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod - 0*M - 0*M) >> 4;
+        default  : {PnM_B, M_Sel_B, En_B} = 3'b000; // (Prod - 0*M - 0*M) >> 4;
     endcase
 end
 
@@ -425,39 +425,39 @@ end
 always @(*)
 begin
     case(Booth)
-        5'b00000 : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod + 0*M + 0*M) >> 4;
-        5'b00001 : {PnM_C, M_Sel_C, En_C} <= 3'b001; // (Prod + 0*M + 1*M) >> 4;
-        5'b00010 : {PnM_C, M_Sel_C, En_C} <= 3'b001; // (Prod + 0*M + 1*M) >> 4;
-        5'b00011 : {PnM_C, M_Sel_C, En_C} <= 3'b011; // (Prod + 0*M + 2*M) >> 4;
-        5'b00100 : {PnM_C, M_Sel_C, En_C} <= 3'b011; // (Prod + 0*M + 2*M) >> 4;
-        5'b00101 : {PnM_C, M_Sel_C, En_C} <= 3'b101; // (Prod + 4*M - 1*M) >> 4;
-        5'b00110 : {PnM_C, M_Sel_C, En_C} <= 3'b101; // (Prod + 4*M - 1*M) >> 4;
-        5'b00111 : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod + 4*M + 0*M) >> 4;
-        5'b01000 : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod + 4*M + 0*M) >> 4;
-        5'b01001 : {PnM_C, M_Sel_C, En_C} <= 3'b001; // (Prod + 4*M + 1*M) >> 4;
-        5'b01010 : {PnM_C, M_Sel_C, En_C} <= 3'b001; // (Prod + 4*M + 1*M) >> 4;
-        5'b01011 : {PnM_C, M_Sel_C, En_C} <= 3'b011; // (Prod + 4*M + 2*M) >> 4;
-        5'b01100 : {PnM_C, M_Sel_C, En_C} <= 3'b011; // (Prod + 4*M + 2*M) >> 4;
-        5'b01101 : {PnM_C, M_Sel_C, En_C} <= 3'b101; // (Prod + 8*M - 1*M) >> 4;
-        5'b01110 : {PnM_C, M_Sel_C, En_C} <= 3'b101; // (Prod + 8*M - 1*M) >> 4;
-        5'b01111 : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod + 8*M + 0*M) >> 4;
-        5'b10000 : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod - 8*M - 0*M) >> 4;
-        5'b10001 : {PnM_C, M_Sel_C, En_C} <= 3'b001; // (Prod - 8*M + 1*M) >> 4;
-        5'b10010 : {PnM_C, M_Sel_C, En_C} <= 3'b001; // (Prod - 8*M + 1*M) >> 4;
-        5'b10011 : {PnM_C, M_Sel_C, En_C} <= 3'b111; // (Prod - 4*M - 2*M) >> 4;
-        5'b10100 : {PnM_C, M_Sel_C, En_C} <= 3'b111; // (Prod - 4*M - 2*M) >> 4;
-        5'b10101 : {PnM_C, M_Sel_C, En_C} <= 3'b101; // (Prod - 4*M - 1*M) >> 4;
-        5'b10110 : {PnM_C, M_Sel_C, En_C} <= 3'b101; // (Prod - 4*M - 1*M) >> 4;
-        5'b10111 : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod - 4*M - 0*M) >> 4;
-        5'b11000 : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod - 4*M - 0*M) >> 4;
-        5'b11001 : {PnM_C, M_Sel_C, En_C} <= 3'b001; // (Prod - 4*M + 1*M) >> 4;
-        5'b11010 : {PnM_C, M_Sel_C, En_C} <= 3'b001; // (Prod - 4*M + 1*M) >> 4;
-        5'b11011 : {PnM_C, M_Sel_C, En_C} <= 3'b111; // (Prod - 0*M - 2*M) >> 4;
-        5'b11100 : {PnM_C, M_Sel_C, En_C} <= 3'b111; // (Prod - 0*M - 2*M) >> 4;
-        5'b11101 : {PnM_C, M_Sel_C, En_C} <= 3'b101; // (Prod - 0*M - 1*M) >> 4;
-        5'b11110 : {PnM_C, M_Sel_C, En_C} <= 3'b101; // (Prod - 0*M - 1*M) >> 4;
-        5'b11111 : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod - 0*M - 0*M) >> 4;
-        default  : {PnM_C, M_Sel_C, En_C} <= 3'b000; // (Prod - 0*M - 0*M) >> 4;
+        5'b00000 : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod + 0*M + 0*M) >> 4;
+        5'b00001 : {PnM_C, M_Sel_C, En_C} = 3'b001; // (Prod + 0*M + 1*M) >> 4;
+        5'b00010 : {PnM_C, M_Sel_C, En_C} = 3'b001; // (Prod + 0*M + 1*M) >> 4;
+        5'b00011 : {PnM_C, M_Sel_C, En_C} = 3'b011; // (Prod + 0*M + 2*M) >> 4;
+        5'b00100 : {PnM_C, M_Sel_C, En_C} = 3'b011; // (Prod + 0*M + 2*M) >> 4;
+        5'b00101 : {PnM_C, M_Sel_C, En_C} = 3'b101; // (Prod + 4*M - 1*M) >> 4;
+        5'b00110 : {PnM_C, M_Sel_C, En_C} = 3'b101; // (Prod + 4*M - 1*M) >> 4;
+        5'b00111 : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod + 4*M + 0*M) >> 4;
+        5'b01000 : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod + 4*M + 0*M) >> 4;
+        5'b01001 : {PnM_C, M_Sel_C, En_C} = 3'b001; // (Prod + 4*M + 1*M) >> 4;
+        5'b01010 : {PnM_C, M_Sel_C, En_C} = 3'b001; // (Prod + 4*M + 1*M) >> 4;
+        5'b01011 : {PnM_C, M_Sel_C, En_C} = 3'b011; // (Prod + 4*M + 2*M) >> 4;
+        5'b01100 : {PnM_C, M_Sel_C, En_C} = 3'b011; // (Prod + 4*M + 2*M) >> 4;
+        5'b01101 : {PnM_C, M_Sel_C, En_C} = 3'b101; // (Prod + 8*M - 1*M) >> 4;
+        5'b01110 : {PnM_C, M_Sel_C, En_C} = 3'b101; // (Prod + 8*M - 1*M) >> 4;
+        5'b01111 : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod + 8*M + 0*M) >> 4;
+        5'b10000 : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod - 8*M - 0*M) >> 4;
+        5'b10001 : {PnM_C, M_Sel_C, En_C} = 3'b001; // (Prod - 8*M + 1*M) >> 4;
+        5'b10010 : {PnM_C, M_Sel_C, En_C} = 3'b001; // (Prod - 8*M + 1*M) >> 4;
+        5'b10011 : {PnM_C, M_Sel_C, En_C} = 3'b111; // (Prod - 4*M - 2*M) >> 4;
+        5'b10100 : {PnM_C, M_Sel_C, En_C} = 3'b111; // (Prod - 4*M - 2*M) >> 4;
+        5'b10101 : {PnM_C, M_Sel_C, En_C} = 3'b101; // (Prod - 4*M - 1*M) >> 4;
+        5'b10110 : {PnM_C, M_Sel_C, En_C} = 3'b101; // (Prod - 4*M - 1*M) >> 4;
+        5'b10111 : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod - 4*M - 0*M) >> 4;
+        5'b11000 : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod - 4*M - 0*M) >> 4;
+        5'b11001 : {PnM_C, M_Sel_C, En_C} = 3'b001; // (Prod - 4*M + 1*M) >> 4;
+        5'b11010 : {PnM_C, M_Sel_C, En_C} = 3'b001; // (Prod - 4*M + 1*M) >> 4;
+        5'b11011 : {PnM_C, M_Sel_C, En_C} = 3'b111; // (Prod - 0*M - 2*M) >> 4;
+        5'b11100 : {PnM_C, M_Sel_C, En_C} = 3'b111; // (Prod - 0*M - 2*M) >> 4;
+        5'b11101 : {PnM_C, M_Sel_C, En_C} = 3'b101; // (Prod - 0*M - 1*M) >> 4;
+        5'b11110 : {PnM_C, M_Sel_C, En_C} = 3'b101; // (Prod - 0*M - 1*M) >> 4;
+        5'b11111 : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod - 0*M - 0*M) >> 4;
+        default  : {PnM_C, M_Sel_C, En_C} = 3'b000; // (Prod - 0*M - 0*M) >> 4;
     endcase
 end
 
@@ -466,11 +466,11 @@ end
 always @(*)
 begin
     case({PnM_B, M_Sel_B, En_B})
-        3'b001  : {Ci_B, B} <= {1'b0,  Mx4};
-        3'b011  : {Ci_B, B} <= {1'b0,  Mx8};
-        3'b101  : {Ci_B, B} <= {1'b1, ~Mx4};
-        3'b111  : {Ci_B, B} <= {1'b1, ~Mx8};
-        default : {Ci_B, B} <= 0;
+        3'b001  : {Ci_B, B} = {1'b0,  Mx4};
+        3'b011  : {Ci_B, B} = {1'b0,  Mx8};
+        3'b101  : {Ci_B, B} = {1'b1, ~Mx4};
+        3'b111  : {Ci_B, B} = {1'b1, ~Mx8};
+        default : {Ci_B, B} = 0;
     endcase
 end
 
@@ -479,11 +479,11 @@ end
 always @(*)
 begin
     case({PnM_C, M_Sel_C, En_C})
-        3'b001  : {Ci_C, C} <= {1'b0,  Mx1};
-        3'b011  : {Ci_C, C} <= {1'b0,  Mx2};
-        3'b101  : {Ci_C, C} <= {1'b1, ~Mx1};
-        3'b111  : {Ci_C, C} <= {1'b1, ~Mx2};
-        default : {Ci_C, C} <= 0;
+        3'b001  : {Ci_C, C} = {1'b0,  Mx1};
+        3'b011  : {Ci_C, C} = {1'b0,  Mx2};
+        3'b101  : {Ci_C, C} = {1'b1, ~Mx1};
+        3'b111  : {Ci_C, C} = {1'b1, ~Mx2};
+        default : {Ci_C, C} = 0;
     endcase
 end
 
